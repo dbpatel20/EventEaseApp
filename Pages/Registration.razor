@@ -1,0 +1,65 @@
+@page "/registration"
+@using System.ComponentModel.DataAnnotations
+@inject EventEaseApp.Services.UserSessionService SessionService
+
+<h1>Event Registration</h1>
+
+<EditForm Model="@registration" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="registration.Name" />
+        <ValidationMessage For="@(() => registration.Name)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <InputText id="email" type="email" class="form-control" @bind-Value="registration.Email" />
+        <ValidationMessage For="@(() => registration.Email)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="event" class="form-label">Event</label>
+        <InputSelect id="event" class="form-select" @bind-Value="registration.SelectedEvent">
+            <option value="">-- Select an event --</option>
+            <option value="Tech Conference">Tech Conference</option>
+            <option value="AI Summit">AI Summit</option>
+            <option value="Design Expo">Design Expo</option>
+        </InputSelect>
+        <ValidationMessage For="@(() => registration.SelectedEvent)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+@if (successMessage != null)
+{
+    <div class="alert alert-success mt-3">@successMessage</div>
+}
+
+@code {
+    private RegistrationModel registration = new();
+    private string? successMessage;
+
+    private void HandleValidSubmit()
+    {
+        SessionService.Register(registration.Name!, registration.SelectedEvent!);
+        successMessage = $"Thank you, {registration.Name}! You are registered for {registration.SelectedEvent}.";
+        registration = new();
+    }
+
+    public class RegistrationModel
+    {
+        [Required(ErrorMessage = "Name is required.")]
+        public string? Name { get; set; }
+
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Enter a valid email address.")]
+        public string? Email { get; set; }
+
+        [Required(ErrorMessage = "Please select an event.")]
+        public string? SelectedEvent { get; set; }
+    }
+}

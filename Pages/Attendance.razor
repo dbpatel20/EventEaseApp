@@ -1,0 +1,16 @@
+@page "/attendance"
+@inject EventEaseApp.Services.UserSessionService SessionService
+
+<h1>Event Attendance</h1>
+
+@if (SessionService.IsRegistered)
+{
+    <p><strong>User:</strong> @SessionService.UserName</p>
+    <p><strong>Event:</strong> @SessionService.RegisteredEvent</p>
+    <p>Status: ✅ Registered</p>
+}
+else
+{
+    <p>No active registration found.</p>
+    <a href="/registration" class="btn btn-primary">Go to Registration</a>
+}

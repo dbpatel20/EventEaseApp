@@ -1,0 +1,37 @@
+@page "/events"
+@using EventEaseApp.Shared
+
+<h1>Upcoming Events</h1>
+
+@if (Events == null || Events.Count == 0)
+{
+    <p>No events available right now.</p>
+}
+else
+{
+    @foreach (var ev in Events)
+    {
+        <EventCard @key="ev.EventName"
+                   EventName="@ev.EventName"
+                   EventDate="@ev.EventDate"
+                   Location="@ev.Location" />
+    }
+}
+
+<a href="/registration" class="btn btn-primary mt-3">Register for an Event</a>
+
+@code {
+    private List<EventModel> Events = new()
+    {
+        new() { EventName = "Tech Conference", EventDate = new DateTime(2025, 11, 12), Location = "San Francisco, CA" },
+        new() { EventName = "AI Summit", EventDate = new DateTime(2025, 12, 5), Location = "New York, NY" },
+        new() { EventName = "Design Expo", EventDate = new DateTime(2026, 1, 20), Location = "Chicago, IL" }
+    };
+
+    public class EventModel
+    {
+        public string? EventName { get; set; }
+        public DateTime EventDate { get; set; }
+        public string? Location { get; set; }
+    }
+}

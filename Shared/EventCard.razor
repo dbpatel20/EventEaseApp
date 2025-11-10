@@ -1,0 +1,13 @@
+@namespace EventEaseApp.Shared
+
+<div class="event-card">
+    <h3>@(string.IsNullOrWhiteSpace(EventName) ? "Unnamed Event" : EventName)</h3>
+    <p><strong>Date:</strong> @(EventDate == default ? "TBA" : EventDate.ToString("MMMM dd, yyyy"))</p>
+    <p><strong>Location:</strong> @(string.IsNullOrWhiteSpace(Location) ? "To Be Announced" : Location)</p>
+</div>
+
+@code {
+    [Parameter] public string? EventName { get; set; }
+    [Parameter] public DateTime EventDate { get; set; }
+    [Parameter] public string? Location { get; set; }
+}
